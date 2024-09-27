@@ -7,7 +7,7 @@ import { LinkFinder } from '@/components/layout/navbar/LinkFinder';
 import { SheetFavorites } from '@/components/layout/navbar/SheetFavorites';
 import { SheetSaved } from '@/components/layout/navbar/SheetSaved';
 
-import { FeedCard } from './components/feedCard/FeedCard';
+import CompanyTable from './components/feedTable/feedTable';
 
 // import { CheckBoxForm } from '@/components/common/checkboxForm/checkBoxForm';
 
@@ -66,7 +66,7 @@ const Page: NextPage<Props> = ({}) => {
         {/* <h1>Hola {user.name ? user.name : user.email}, estás validado</h1> */}
         <p className='m-5 text-lg font-bold'>Activity Feeds</p>
         <hr className='w-100' />
-        <FeedCard />
+        <CompanyTable />
       </div>
     </ContentLayout>
   );

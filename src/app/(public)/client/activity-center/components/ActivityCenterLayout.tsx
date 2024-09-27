@@ -1,8 +1,11 @@
+import { cn } from '@/lib/utils';
+
 interface Props {
   controllers: React.ReactNode;
   seachForm: React.ReactNode;
   listComponent: React.ReactNode;
   activeElement: React.ReactNode;
+  activeElementClass?: string;
 }
 
 export const ActivityCenterLayout = ({
@@ -10,6 +13,7 @@ export const ActivityCenterLayout = ({
   seachForm,
   activeElement,
   listComponent,
+  activeElementClass,
 }: Props) => {
   return (
     <div className='grid grid-cols-5 p-4'>
@@ -18,7 +22,11 @@ export const ActivityCenterLayout = ({
         <div className='mt-4 flex'>{seachForm}</div>
         {listComponent}
       </div>
-      <div className='col-span-3 hidden pl-4 lg:block'>{activeElement}</div>
+      <div
+        className={cn('col-span-3 hidden pl-4 lg:block', activeElementClass)}
+      >
+        {activeElement}
+      </div>
     </div>
   );
 };

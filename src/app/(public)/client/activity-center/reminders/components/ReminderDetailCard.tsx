@@ -1,5 +1,6 @@
 'use client';
 
+import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { formatPhoneNumber } from 'react-phone-number-input';
 
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
@@ -55,10 +56,10 @@ export const ReminderDetailCard = () => {
       <CardACRoot className='gap-0'>
         <div className='flex justify-between'>
           <div className='flex flex-col gap-1'>
-            <p className='text-base font-semibold'>{title}</p>
+            <p className='text-left text-base font-semibold'>{title}</p>
             <StateParser state={state} />
           </div>
-          <p className='text-xs font-normal text-muted-foreground'>
+          <p className='text-right text-xs font-normal text-muted-foreground'>
             {format(date, 'MM/dd/yyyy, HH:mm aaaa')}
           </p>
         </div>
@@ -70,7 +71,11 @@ export const ReminderDetailCard = () => {
           <LabelContent label='Due date' content={formatDateRelative(dueAt)} />
           <p className='col-span-full text-muted-foreground'>{description}</p>
           <LabelContent label='Company name:' content={companyName} />
-          <LabelContent label='Email Address:' content={email} />
+          <LabelContent
+            label='Email Address:'
+            className='break-all'
+            content={email}
+          />
           <LabelContent
             label='Phone number:'
             content={formatPhoneNumber(phoneNumber)}
@@ -90,14 +95,19 @@ export const ReminderDetailCard = () => {
   );
 };
 
-interface LabelContentProps {
+interface LabelContentProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string;
   content: string;
 }
 
-export const LabelContent = ({ content, label }: LabelContentProps) => {
+export const LabelContent = ({
+  content,
+  label,
+  ...rest
+}: LabelContentProps) => {
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col' {...rest}>
       <p className='text-xs font-medium text-muted-foreground'>{label}</p>
       <p className='text-sm font-medium'>{content}</p>
     </div>

@@ -1,12 +1,5 @@
 import { Group } from '@/types/TMenu';
-import {
-  Building2,
-  House,
-  LaptopMinimal,
-  Mail,
-  Rss,
-  UserCog,
-} from 'lucide-react';
+import { Building2, House, LaptopMinimal, Mail, Rss } from 'lucide-react';
 
 export function getMenuList(): Group[] {
   return [
@@ -59,17 +52,6 @@ export function getMenuList(): Group[] {
             {
               href: '/client/activity-center/reminders',
               label: 'Reminders',
-            },
-          ],
-        },
-        {
-          href: '',
-          label: 'Account Settings',
-          icon: UserCog,
-          submenus: [
-            {
-              href: '/blank',
-              label: 'Blank',
             },
           ],
         },

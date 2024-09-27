@@ -10,3 +10,7 @@ export interface Business {
   detailsUrl: string;
   coordinates: { lng: number; lat: number };
 }
+
+export type QueryObject = Partial<
+  Omit<Business, 'id' | 'detailsUrl' | 'coordinates' | 'licenseStatus'>
+> & { zipCode: string; licenseStatus?: string };

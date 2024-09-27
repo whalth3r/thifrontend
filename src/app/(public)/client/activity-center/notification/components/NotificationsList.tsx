@@ -7,12 +7,13 @@ import { NotificationCard } from './NotificationCard';
 import { NotificationDetailCard } from './NotificationDetailCard';
 
 export const NotificationsList = () => {
-  const { isLoading, notifications } = useNotifications();
+  const { isLoading, filters } = useNotifications();
   return (
     <>
       <CardListAC
+        scrollAreaClass='h-[calc(100vh-48px-36px-48px-95px-80px)]'
         isLoading={isLoading}
-        items={notifications}
+        items={filters.notifications}
         CardComponent={NotificationCard}
         DetailComponent={NotificationDetailCard}
         emptyText={

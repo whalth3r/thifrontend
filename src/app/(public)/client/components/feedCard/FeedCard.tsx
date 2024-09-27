@@ -126,7 +126,7 @@ export const FeedCard = () => {
           key={index}
         >
           <div className='flex flex-row items-center gap-2'>
-            <a className='h-3/6 space-x-2 rounded-full bg-gray-100 p-1 lg:h-4/6'>
+            <a className='h-50 space-x-2 rounded-full bg-gray-100 p-1'>
               {statusIcons[card.status]}
             </a>
             <div>

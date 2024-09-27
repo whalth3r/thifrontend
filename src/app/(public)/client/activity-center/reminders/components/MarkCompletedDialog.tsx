@@ -49,11 +49,13 @@ export const MarkCompletedDialog = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger className='col-span-full flex justify-end'>
-        <Button variant={'outline'}>
-          Mark as completed
-          <Check className='my-auto ml-2 h-4 w-4' />
-        </Button>
+      <DialogTrigger asChild>
+        <div className='col-span-full flex justify-end'>
+          <Button variant={'outline'}>
+            Mark as completed
+            <Check className='my-auto ml-2 h-4 w-4' />
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -7,7 +7,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className='max-w-screen flex min-h-screen w-full flex-row justify-between overflow-hidden'>
+    <main className='max-w-screen flex h-screen w-full flex-row justify-between overflow-hidden'>
       <section className='relative hidden min-h-full w-2/4 lg:block'>
         <Image
           className='-z-10 object-cover'
@@ -38,9 +38,11 @@ export default function AuthLayout({
           </div>
         </div>
       </section>
-      <section className='relative flex w-full flex-col items-center justify-center px-4 py-16 md:px-8 lg:px-14 lg:py-[92px] min-[1157px]:w-2/4 xl:px-24'>
+      <section className='relative flex w-full flex-col items-center justify-center px-2 py-16 min-[1157px]:w-2/4'>
         <RedirectButton />
-        <div className='w-full'>{children}</div>
+        <div className='custom-scrollbar w-full max-w-lg overflow-y-auto overflow-x-hidden px-4 md:px-8 lg:max-w-[34rem]'>
+          {children}
+        </div>
       </section>
     </main>
   );

@@ -2,20 +2,32 @@
 
 import { useCallback, useEffect } from 'react';
 
+import { nextApi } from '@/services/api.service';
 import {
   NotesCompanyMember,
   TransformedNotesMember,
 } from '@/types/TActivityCenter';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { useNotes } from '@/store/useNotes';
 
 import { CardListAC } from '../../components/CardListAC';
-import { getNotesAction } from '../actions/getNotes';
+import { getFilteredNotesAction } from '../actions/getFilteredNotesAction';
 import { NoteCard } from './NoteCard';
 import { NotesDetailCard } from './NotesDetailCard';
 
 export const NotesList = () => {
-  const { isLoading, notes, setIsLoading, setNotes } = useNotes();
+  const {
+    isLoading,
+    notes,
+    filters,
+    setIsLoading,
+    setNotes,
+    setFilteredNotes,
+    setResetState,
+  } = useNotes();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const transformNotesMember = (
     members: NotesCompanyMember[],
@@ -28,25 +40,51 @@ export const NotesList = () => {
     }));
   };
 
-  const loadNotes = useCallback(async () => {
+  const loadNotesFromApi = useCallback(async () => {
+    setIsLoading(true);
+    nextApi
+      .get<NotesCompanyMember[]>({ url: '/client/activity-center/notes' })
+      .then(({ data }) => {
+        setNotes(data);
+        setFilteredNotes(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => setIsLoading(false));
+  }, [setFilteredNotes, setIsLoading, setNotes]);
+
+  const applyFilter = useCallback(async () => {
     setIsLoading(true);
     try {
-      const result = await getNotesAction();
-      setNotes(result);
-      setIsLoading(false);
+      const filteredNotes = await getFilteredNotesAction(notes, filters.search);
+      setFilteredNotes(filteredNotes);
     } catch (error) {
+      console.error(error);
+    } finally {
       setIsLoading(false);
     }
-  }, [setIsLoading, setNotes]);
+  }, [filters.search, notes, setFilteredNotes, setIsLoading]);
 
   useEffect(() => {
-    loadNotes();
-  }, [loadNotes]);
+    if (notes.length > 0) {
+      applyFilter();
+    }
+  }, [applyFilter, notes.length]);
+
+  // Detectar el cambio de ruta y resetear los filtros
+  useEffect(() => {
+    setResetState();
+  }, [pathname, searchParams, setResetState]);
+
+  useEffect(() => {
+    loadNotesFromApi();
+  }, [loadNotesFromApi]);
 
   return (
     <CardListAC
       isLoading={isLoading}
-      items={transformNotesMember(notes)}
+      items={transformNotesMember(filters.notes)}
       CardComponent={NoteCard}
       DetailComponent={NotesDetailCard}
       emptyText='No notes available to review at the moment.'

@@ -23,6 +23,8 @@ import {
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
+import { cn } from '@/lib/utils';
+
 import { CardACSkeleton } from './CardACSkeleton';
 
 // Definimos una interfaz genérica para los objetos
@@ -41,6 +43,7 @@ interface CardListACProps<T>
   // eslint-disable-next-line @typescript-eslint/naming-convention
   DetailComponent: ComponentType<{ item: T }>;
   emptyText: string;
+  scrollAreaClass?: string;
 }
 
 export const CardListAC = <T extends GenericObjectProps>({
@@ -49,19 +52,24 @@ export const CardListAC = <T extends GenericObjectProps>({
   emptyText,
   isLoading,
   items,
+  scrollAreaClass,
 }: CardListACProps<T>) => {
   const isMobile = useMediaQuery('(max-width: 1023px)');
   return (
-    <div className='mt-4 h-full'>
+    <div className='mt-4'>
       {isLoading ? (
-        <ScrollArea className='h-full lg:h-[calc(100vh-48px-36px-16px-32px-140px)]'>
+        <ScrollArea
+          className={cn(`h-[calc(100vh-48px-36px-48px-95px)]`, scrollAreaClass)}
+        >
           <CardACSkeleton />
           <CardACSkeleton />
           <CardACSkeleton />
           <CardACSkeleton />
         </ScrollArea>
       ) : items.length > 0 ? (
-        <ScrollArea className='h-full lg:h-[calc(100vh-48px-36px-16px-32px-140px)]'>
+        <ScrollArea
+          className={cn(`h-[calc(100vh-48px-36px-48px-95px)]`, scrollAreaClass)}
+        >
           {items.map((item, index) =>
             isMobile ? (
               <Sheet key={index}>
@@ -72,13 +80,15 @@ export const CardListAC = <T extends GenericObjectProps>({
                   className='w-full sm:max-w-full'
                   defaultCloseButton={false}
                 >
-                  <SheetClose className='flex w-full border-b pb-4'>
-                    <Button variant={'outline'}>
-                      <MoveLeft className='my-auto mr-2 h-4 w-4' />
-                      Regresar
-                    </Button>
-                  </SheetClose>
-                  <SheetHeader className='mt-4'>
+                  <div className='flex w-full border-b pb-4'>
+                    <SheetClose asChild>
+                      <Button variant={'outline'}>
+                        <MoveLeft className='my-auto mr-2 h-4 w-4' />
+                        Regresar
+                      </Button>
+                    </SheetClose>
+                  </div>
+                  <SheetHeader className='mt-4 h-[calc(100dvh-24px-16px-40px-16px-40px)]'>
                     <SheetTitle className='sr-only'>{item.title}</SheetTitle>
                     <SheetDescription className='sr-only'>
                       {item.description}
@@ -95,7 +105,12 @@ export const CardListAC = <T extends GenericObjectProps>({
           )}
         </ScrollArea>
       ) : (
-        <div className='flex h-full items-center justify-center text-center'>
+        <div
+          className={cn(
+            'flex h-[calc(100vh-48px-36px-48px-95px)] items-center justify-center text-center',
+            scrollAreaClass,
+          )}
+        >
           <p>{emptyText}</p>
         </div>
       )}

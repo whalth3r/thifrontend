@@ -66,3 +66,34 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Avatar user image, this styles prevent the container of the picture from adding unnecessary paddings. */
+.avatar-image-displayer > div {
+  padding-right: 0rem;
+  padding-left: 0rem;
+}
+
+/* Customize website's scrollbar like Mac OS
+Not supports in Firefox and IE */
+
+/* total width */
+.custom-scrollbar::-webkit-scrollbar {
+  background-color: #757575;
+  width: 4px;
+}
+
+/* background of the scrollbar except button or resizer */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+}
+
+/* scrollbar itself */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #bcbcbc;
+  border-radius: 14px;
+  border: 7px solid #7c7c7c;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #8f8f8f; /* Change color on hover */
+  border-color: #616161; /* Change border color on hover */
+}

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { Config } from 'tailwindcss';
 
+const colors = require('tailwindcss/colors');
+
 const config: Config = {
   darkMode: ['class'],
   content: [
@@ -11,8 +13,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        error: {
+          dark: colors.red[950],
+          base: colors.red[500],
+          light: colors.red[200],
+          lighter: colors.red[50],
+        },
+        success: {
+          dark: colors.green[950],
+          base: colors.green[500],
+          light: colors.green[200],
+          lighter: colors.green[50],
+        },
+        warning: {
+          dark: colors.orange[950],
+          base: colors.orange[500],
+          light: colors.orange[200],
+          lighter: colors.orange[50],
+        },
+        info: {
+          dark: colors.blue[950],
+          base: colors.blue[500],
+          light: colors.blue[200],
+          lighter: colors.blue[50],
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        inputs: {
+          '100': '#99A0AE',
+          '300': '#525866',
+        },
+        blackcustom: {
+          '900': '#18181B',
+        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
@@ -40,6 +73,10 @@ const config: Config = {
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
+        },
+        content: {
+          primary: '#272E35',
+          secondary: '#555F6D',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

@@ -14,11 +14,11 @@ export const Stepper: React.FC<StepperProps> = ({ stepsId, swithcSteps }) => {
   const stepper = useStepper();
 
   return (
-    <div className='bg-gray-3 my-4 flex flex-col gap-4 rounded-md p-4'>
+    <div className='w-full'>
       {stepper.switch(swithcSteps)}
 
       {!stepper.isLast ? (
-        <div className='flex items-center gap-2'>
+        <div className='mt-4 flex items-center gap-2'>
           <Button onClick={stepper.prev} disabled={stepper.isFirst}>
             Previous
           </Button>

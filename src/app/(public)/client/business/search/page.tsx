@@ -1,5 +1,4 @@
 import {
-  BusinessSearchForm,
   BusinessSearchMap,
   BusinessSearchTable,
 } from '@/components/common/search';
@@ -17,7 +16,6 @@ export default function BusinessSearchPage({}: BusinessSearchPageProps) {
         <h2 className='text-lg'>Kings st, Santa Cruz, CA 95060, EE. UU.</h2>
       </div>
       <BusinessSearchMap />
-      <BusinessSearchForm />
       <BusinessSearchTable />
     </ContentLayout>
   );

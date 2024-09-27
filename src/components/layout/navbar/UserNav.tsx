@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutGrid, LogOut, User } from 'lucide-react';
+import { LayoutGrid, User } from 'lucide-react';
 import Link from 'next/link';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -20,6 +20,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+
+import { LogoutButton } from './logoutButton';
 
 interface Props {
   src: string | undefined;
@@ -77,17 +79,17 @@ export const UserNav = ({ email, name, src }: Props) => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className='hover:cursor-pointer' asChild>
-            <Link href='/account' className='flex items-center'>
+            <Link
+              href='/client/account-settings/profile'
+              className='flex items-center'
+            >
               <User className='mr-3 h-4 w-4 text-muted-foreground' />
               Account
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className='hover:cursor-pointer' onClick={() => {}}>
-          <LogOut className='mr-3 h-4 w-4 text-muted-foreground' />
-          Sign out
-        </DropdownMenuItem>
+        <LogoutButton />
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -181,7 +181,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ currentForm }) => {
                   href='/forgot-password'
                   className='text-sm font-medium leading-5 text-[#0072B4] hover:opacity-75'
                 >
-                  ¿Olvidaste tu contraseña?
+                  Forgot password?
                 </Link>
               </div>
             )}
