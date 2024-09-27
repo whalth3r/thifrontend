@@ -1,0 +1,4 @@
+pnpm install
+pnpm run build
+pnpm run lint
+pnpm exec lint-staged

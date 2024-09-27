@@ -1,0 +1,122 @@
+[
+  {
+    "id": 11,
+    "industry": "Cannabis",
+    "licenseType": "Cultivator",
+    "licenseStatus": "Active",
+    "companyName": "LA Green Farms",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.2437,
+      "lat": 34.0522
+    }
+  },
+  {
+    "id": 12,
+    "industry": "Cannabis",
+    "licenseType": "Retailer",
+    "licenseStatus": "Active",
+    "companyName": "West Coast Herb",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.2673,
+      "lat": 34.0407
+    }
+  },
+  {
+    "id": 13,
+    "industry": "Cannabis",
+    "licenseType": "Product Manufacturer",
+    "licenseStatus": "Pending",
+    "companyName": "Downtown Extracts",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.255,
+      "lat": 34.0529
+    }
+  },
+  {
+    "id": 14,
+    "industry": "Cannabis",
+    "licenseType": "Cultivator",
+    "licenseStatus": "Inactive",
+    "companyName": "Sunset Growers",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.2942,
+      "lat": 34.0822
+    }
+  },
+  {
+    "id": 15,
+    "industry": "Cannabis",
+    "licenseType": "Retailer",
+    "licenseStatus": "Active",
+    "companyName": "Highland Park Dispensary",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.2115,
+      "lat": 34.1118
+    }
+  },
+  {
+    "id": 16,
+    "industry": "Cannabis",
+    "licenseType": "Product Manufacturer",
+    "licenseStatus": "Active",
+    "companyName": "Hollywood Extracts",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.33,
+      "lat": 34.0928
+    }
+  },
+  {
+    "id": 17,
+    "industry": "Cannabis",
+    "licenseType": "Cultivator",
+    "licenseStatus": "Pending",
+    "companyName": "Echo Park Herb Co.",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.2507,
+      "lat": 34.0782
+    }
+  },
+  {
+    "id": 18,
+    "industry": "Cannabis",
+    "licenseType": "Retailer",
+    "licenseStatus": "Inactive",
+    "companyName": "Venice Beach Cannabis",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.472,
+      "lat": 33.985
+    }
+  },
+  {
+    "id": 19,
+    "industry": "Cannabis",
+    "licenseType": "Product Manufacturer",
+    "licenseStatus": "Active",
+    "companyName": "Santa Monica Extracts",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.4957,
+      "lat": 34.0195
+    }
+  },
+  {
+    "id": 20,
+    "industry": "Cannabis",
+    "licenseType": "Cultivator",
+    "licenseStatus": "Active",
+    "companyName": "Beverly Hills Growers",
+    "state": "California",
+    "coordinates": {
+      "lng": -118.4004,
+      "lat": 34.0736
+    }
+  }
+]
