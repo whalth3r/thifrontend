@@ -2,24 +2,26 @@
 
 //import { useState } from 'react';
 import { useState } from 'react';
+import { DropzoneOptions } from 'react-dropzone';
 // import { DropzoneOptions } from 'react-dropzone';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
-// import {
-//   // ACCEPTED_PHOTO_TYPES,
-//   ACCEPTED_PHOTO_TYPES_CONFIG,
-//   MAX_FILE_SIZE,
-// } from '@/data/filesInputValidations/acceptedtypes';
+import {
+  ACCEPTED_PHOTO_TYPES_CONFIG,
+  MAX_FILE_SIZE,
+} from '@/data/filesInputValidations/acceptedtypes';
+import {
+  UserDataType,
+  userDataSchema,
+} from '@/schemas/auth/userDataForm.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { isValidPhoneNumber } from 'libphonenumber-js';
-// import { Paperclip } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
-// import { useRouter } from 'next/navigation';
-import z from 'zod';
 
+// import { useRouter } from 'next/navigation';
 import { CheckboxGroupField } from '@/components/common/shadcn_extentions/inputs/CheckboxInput';
 import { SelectInputField } from '@/components/common/shadcn_extentions/inputs/SelectInput';
 import { TextInputField } from '@/components/common/shadcn_extentions/inputs/TextInput';
+import { FileUploaderField } from '@/components/common/shadcn_extentions/inputs/file-uploader/FileUploaderInput';
 // import { FileUploaderField } from '@/components/common/shadcn_extentions/inputs/file-uploader/FileUploaderInput';
 import { PhoneInputField } from '@/components/common/shadcn_extentions/inputs/phone-input/PhoneInputField';
 import { EyeIcon } from '@/components/icons/EyeIcon';
@@ -27,110 +29,22 @@ import { EyeLineIcon } from '@/components/icons/EyeLineIcon';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 
-const CardForm = z
-  .object({
-    // filePhoto: z
-    //   .array(
-    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-    //     z.instanceof(File).refine((file) => file.size < MAX_FILE_SIZE, {
-    //       message: 'El tamaño del archivo debe ser menor a 10MB',
-    //     }),
-    //   )
-    //   .refine(
-    //     (files) =>
-    //       files.every((file) => ACCEPTED_PHOTO_TYPES.includes(file.type)),
-    //     {
-    //       message: 'Solo se aceptan archivos JPG, JPEG y PNG.',
-    //     },
-    //   ),
-    // filePhoto: z
-    // .array(
-    //   z.custom<File>((file) => {
-    //     if (typeof window === 'undefined') {
-    //       return true; // Return `true` in the server environment to avoid `File` being undefined
-    //     }
-    //     return file instanceof File && file.size < MAX_FILE_SIZE;
-    //   }, {
-    //     message: 'El tamaño del archivo debe ser menor a 10MB',
-    //   })
-    // )
-    // .refine(
-    //   (files) =>
-    //     files.every((file) =>
-    //       ACCEPTED_PHOTO_TYPES.includes(file.type)
-    //     ),
-    //   {
-    //     message: 'Solo se aceptan archivos JPG, JPEG y PNG.',
-    //   }
-    // ),
-    firstName: z
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      .string({ required_error: 'First name is required' })
-      .max(100, 'Name is too long'),
-    lastName: z
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      .string({ required_error: 'Last name is required' })
-      .max(100, 'Last name is too long'),
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    zipCode: z
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      .string({ required_error: 'Zip code is required' })
-      .max(10, 'Zip code is too long'),
-    phoneNumber: z
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      .string({ required_error: 'Phone number is required' })
-      .refine((value) => isValidPhoneNumber(value), {
-        message: 'Invalid phone number',
-      }),
-    selectCompany: z.string({
-      //eslint-disable-next-line @typescript-eslint/naming-convention
-      required_error: 'El género es obligatorio.',
-      //eslint-disable-next-line @typescript-eslint/naming-convention
-      invalid_type_error: 'El género es obligatorio.',
-    }),
-    companyOwnership: z.enum(['owner', 'affiliated'], {
-      //eslint-disable-next-line @typescript-eslint/naming-convention
-      required_error: 'Please select at least one item',
-    }),
-    companyRole: z.string({
-      //eslint-disable-next-line @typescript-eslint/naming-convention
-      required_error: 'El género es obligatorio.',
-      //eslint-disable-next-line @typescript-eslint/naming-convention
-      invalid_type_error: 'El género es obligatorio.',
-    }),
-    password: z
-      .string()
-      .min(8, { message: 'Password must be at least 8 characters long.' })
-      .regex(/[a-zA-Z]/, 'Must contain at least one letter.')
-      .regex(/(?=.*[!@#$&*])/, 'Must contain at least one special character.')
-      .regex(/[0-9]/, 'Must contain at least one number.'),
-    confirmPassword: z
-      .string()
-      .min(8, { message: 'Password must be at least 8 characters long.' })
-      .regex(/[a-zA-Z]/, 'Must contain at least one letter.')
-      .regex(/(?=.*[!@#$&*])/, 'Must contain at least one special character.')
-      .regex(/[0-9]/, 'Must contain at least one number.'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords must match.',
-    path: ['confirmPassword'],
-  });
-
-type CardFormType = z.infer<typeof CardForm>;
-
 export const UserDataForm = () => {
   // const router = useRouter();
-  const form = useForm<CardFormType>({
-    resolver: zodResolver(CardForm),
+  const form = useForm<UserDataType>({
+    resolver: zodResolver(userDataSchema),
     defaultValues: {
-      // filePhoto: undefined,
+      filePhoto: [],
       phoneNumber: '',
       firstName: '',
       lastName: '',
       zipCode: '',
       selectCompany: '',
-      companyOwnership: undefined,
+      companyName: null,
+      companyOwnership: null,
       companyRole: '',
+      howYouFindUs: '',
+      otherSource: null,
       password: '',
       confirmPassword: '',
     },
@@ -143,9 +57,14 @@ export const UserDataForm = () => {
   // const [modalMessage, setModalMessage] = useState('');
   // const [modalType, setModalType] = useState<DialogType>('error');
   const [isDisabledButton, setIsDisabledButton] = useState(true);
-  // const filePhoto = useWatch({ control: form.control, name: 'filePhoto' });
+  const filePhoto = useWatch({ control: form.control, name: 'filePhoto' });
+  const companySelect = form.watch('selectCompany');
+  const whereDidYouHearOfUs = form.watch('howYouFindUs');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
+  // const phone = form.watch('phoneNumber');
+  // console.log(phone);
   //console.log(data);
   // const modalCallToAction = (
   //   message: string,
@@ -178,7 +97,7 @@ export const UserDataForm = () => {
   //   }
   // }, [editProfile, router]);
 
-  const onSubmit = async (data: CardFormType) => {
+  const onSubmit = async (data: UserDataType) => {
     setIsRequestinPrcoess(!isRequestinPrcoess);
     setIsButtonDisabled(!isButtonDisabled);
     setIsDisabledButton(!isDisabledButton);
@@ -190,6 +109,11 @@ export const UserDataForm = () => {
     //   data.filePhoto.forEach((file) => formData.append('FotoPerfil', file));
     // }
     console.warn('formData', data);
+    setTimeout(() => {
+      setIsRequestinPrcoess(!isRequestinPrcoess);
+      setIsButtonDisabled(!isButtonDisabled);
+      setIsDisabledButton(!isDisabledButton);
+    }, 1000);
   };
 
   // const handleCompleteLater = () => {
@@ -204,21 +128,20 @@ export const UserDataForm = () => {
   //     router.push('/login');
   //   }, 5000); // Asegúrate de que este tiempo coincida con el tiempo que el modal estará visible
   // };
-
-  // const dropzone = {
-  //   multiple: false,
-  //   maxFiles: 1,
-  //   maxSize: MAX_FILE_SIZE,
-  //   accept: ACCEPTED_PHOTO_TYPES_CONFIG,
-  // } satisfies DropzoneOptions;
+  const dropzone = {
+    multiple: false,
+    maxFiles: 1,
+    maxSize: MAX_FILE_SIZE,
+    accept: ACCEPTED_PHOTO_TYPES_CONFIG,
+  } satisfies DropzoneOptions;
   const {
     formState: { errors },
   } = form;
   const companyOptions = [
-    { id: '1', name: 'Company 1' },
-    { id: '2', name: 'Company 2' },
-    { id: '3', name: 'Company 3' },
-    { id: '4', name: 'OTHER' },
+    { id: 'company1', name: 'Company 1' },
+    { id: 'company2', name: 'Company 2' },
+    { id: 'company3', name: 'Company 3' },
+    { id: 'other', name: 'OTHER' },
   ];
   const items = [
     {
@@ -236,23 +159,44 @@ export const UserDataForm = () => {
     { id: '3', name: 'CEO' },
     { id: '4', name: 'Accounting' },
   ];
+  const howYouFindUsOptions = [
+    { id: 'facebook', name: 'Facebook' },
+    { id: 'instagram', name: 'Instagram' },
+    { id: 'linkedin', name: 'Linkedin' },
+    { id: 'other', name: 'Other' },
+  ];
   return (
     <>
+      <div className='mx-auto flex w-full flex-col items-center gap-2'>
+        <div className='w-full py-4'>
+          <div className='w-full text-start text-sm font-medium leading-7 text-[#99A0AE]'>
+            {2}/{4}
+          </div>
+          <h2 className='text-start text-2xl font-semibold leading-8 tracking-tighter'>
+            Let’s get to know yo
+          </h2>
+          <p className='mt-7 w-full text-start text-lg font-normal leading-7'>
+            We&rsquo;re excited to have you! Please share a few details so we
+            can create your account.
+          </p>
+        </div>
+        <div className='w-full border border-dotted'></div>
+      </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='mt-4 w-full'>
           <div className='grid grid-cols-1 gap-7 md:grid-cols-2'>
-            {/* <div className='col-span-1 md:col-span-2 xl:col-span-2'>
+            <div className='col-span-1 md:col-span-2 xl:col-span-2'>
               <FileUploaderField
                 control={form.control}
                 name='filePhoto'
                 label='Profile picture'
                 description='*png, *jpeg files up to 10MB at least 400px by 400px'
                 dropzoneOptions={dropzone}
-                value={filePhoto}
+                value={filePhoto as unknown as File[]}
                 onValueChange={(files) => form.setValue('filePhoto', files)}
                 error={errors.filePhoto}
               />
-            </div> */}
+            </div>
             <TextInputField
               control={form.control}
               name='firstName'
@@ -260,7 +204,6 @@ export const UserDataForm = () => {
               label='First Name'
               placeholder='Enter your first name...'
               error={errors.firstName}
-              isOptional
             />
             <TextInputField
               control={form.control}
@@ -285,39 +228,52 @@ export const UserDataForm = () => {
               name='phoneNumber'
               className='col-span-1 leading-4'
               label='Phone Number'
-              error={form.formState.errors.phoneNumber}
+              error={errors.phoneNumber}
             />
             <SelectInputField
               control={form.control}
               name='selectCompany'
-              label='Company Name'
-              className='col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-2'
+              label='Select your company'
+              className='col-span-1 md:col-span-2'
               placeholder='Select'
               options={companyOptions}
               error={errors.selectCompany}
+              isOptional
             />
+            {companySelect === 'other' && (
+              <TextInputField
+                control={form.control}
+                name='companyName'
+                className='col-span-1 md:col-span-2'
+                label='Company Name'
+                placeholder='Enter your company name'
+                error={errors.companyName}
+              />
+            )}
             <CheckboxGroupField
               control={form.control}
-              name='items'
+              name='companyOwnership'
               className='col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-2'
               label='Company ownership'
               items={items}
               // description='Select the items you want to display in the sidebar.'
               error={errors.companyOwnership}
+              isOptional
             />
             <SelectInputField
               control={form.control}
               name='companyRole'
               label='What is your role?'
-              className='col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-2'
+              className='col-span-1 md:col-span-2'
               placeholder='Select'
               options={companyRolesOptions}
               error={errors.companyRole}
+              isOptional
             />
             <TextInputField
               control={form.control}
               name='password'
-              className='col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-2'
+              className='col-span-1 md:col-span-2 lg:col-span-1'
               label='Password'
               placeholder='Enter your password'
               type={isPasswordVisible ? 'text' : 'password'}
@@ -328,33 +284,56 @@ export const UserDataForm = () => {
             <TextInputField
               control={form.control}
               name='confirmPassword'
-              className='col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-2'
+              className='col-span-1 md:col-span-2 lg:col-span-1'
               label='Confirm Password'
               placeholder='Enter your password'
-              type={isPasswordVisible ? 'text' : 'password'}
-              suffix={isPasswordVisible ? <EyeLineIcon /> : <EyeIcon />}
-              toggle={() => setIsPasswordVisible(!isPasswordVisible)}
+              type={isConfirmPasswordVisible ? 'text' : 'password'}
+              suffix={isConfirmPasswordVisible ? <EyeLineIcon /> : <EyeIcon />}
+              toggle={() =>
+                setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
+              }
               error={errors.confirmPassword}
             />
-            <div className='flex w-full flex-col justify-center gap-2'>
-              <Button
-                type='submit'
-                className='font-inter w-full font-medium shadow-sm'
-                disabled={isButtonDisabled}
-              >
-                Cargar datos
-                {isRequestinPrcoess && (
-                  <Loader2 className='ml-2 h-4 w-4 animate-spin' />
-                )}
-              </Button>
-              <Button
-                type='button'
-                variant={'secondary'}
-                className='font-inter !border !border-[#D3D3D3] font-medium shadow-sm hover:opacity-75'
-                // onClick={handleCompleteLater}
-              >
-                Completar más tarde
-              </Button>
+            <SelectInputField
+              control={form.control}
+              name='howYouFindUs'
+              label='Where did you hear about us?'
+              className='col-span-1 md:col-span-2'
+              placeholder='Select'
+              options={howYouFindUsOptions}
+              error={errors.howYouFindUs}
+            />
+            {whereDidYouHearOfUs === 'other' && (
+              <TextInputField
+                control={form.control}
+                name='otherSource'
+                className='col-span-1 md:col-span-2'
+                label='Name of the source'
+                placeholder='Write the name of the source'
+                error={errors.otherSource}
+              />
+            )}
+            <div className='col-span-1 md:col-span-2'>
+              <div className='flex flex-col items-center justify-center gap-4 md:flex-row md:justify-end'>
+                <Button
+                  type='button'
+                  variant={'secondary'}
+                  className='font-inter order-2 w-full !border !border-[#D3D3D3] font-medium shadow-sm hover:opacity-75 md:order-1 md:w-fit'
+                  // onClick={handleCompleteLater}
+                >
+                  Back
+                </Button>
+                <Button
+                  type='submit'
+                  className='font-inter order-1 w-full font-medium shadow-sm md:order-2 md:w-fit'
+                  disabled={isButtonDisabled}
+                >
+                  Continue
+                  {isRequestinPrcoess && (
+                    <Loader2 className='ml-2 h-4 w-4 animate-spin md:order-1' />
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </form>

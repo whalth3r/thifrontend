@@ -12,7 +12,7 @@ export const getFilteredNotesAction = async (
 
   if (search) {
     filteredNotes = notes.filter((n) =>
-      n.companyName.toLowerCase().includes(search.toLowerCase()),
+      n.referenceName.toLowerCase().includes(search.toLowerCase()),
     );
   }
 

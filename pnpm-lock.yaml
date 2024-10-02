@@ -7,6 +7,9 @@ settings:
 importers:
   .:
     dependencies:
+      '@date-fns/tz':
+        specifier: ^1.1.2
+        version: 1.1.2
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@18.3.1))
@@ -412,6 +415,12 @@ packages:
         integrity: sha512-/l42B1qxpG6RdfYf343Uw1vmDjeNhneUXtzhojE7pDgfpEypmRhI6j1kr17XCVv4Cgl9HdAiQY2x0GwKm7rWCw==,
       }
     engines: { node: '>=6.9.0' }
+
+  '@date-fns/tz@1.1.2':
+    resolution:
+      {
+        integrity: sha512-Xmg2cPmOPQieCLAdf62KtFPU9y7wbQDq1OAzrs/bEQFvhtCPXDiks1CHDE/sTXReRfh/MICVkw/vY6OANHUGiA==,
+      }
 
   '@eslint-community/eslint-utils@4.4.0':
     resolution:
@@ -6156,6 +6165,8 @@ snapshots:
       '@babel/helper-string-parser': 7.24.8
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
+
+  '@date-fns/tz@1.1.2': {}
 
   '@eslint-community/eslint-utils@4.4.0(eslint@8.57.1)':
     dependencies:

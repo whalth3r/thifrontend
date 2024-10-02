@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Control, Controller, FieldError } from 'react-hook-form';
 import PhoneInput, { type Country } from 'react-phone-number-input/input';
 
-// import { getExampleNumber, parsePhoneNumber } from 'libphonenumber-js';
+import i18nIsoCountries from 'i18n-iso-countries';
+import enCountries from 'i18n-iso-countries/langs/en.json';
 import { getExampleNumber } from 'libphonenumber-js';
 import examples from 'libphonenumber-js/mobile/examples';
 
@@ -24,75 +25,78 @@ type CountryOption = {
   indicatif: string;
 };
 
-interface PhoneInputProps {
+i18nIsoCountries.registerLocale(enCountries);
+
+interface PhoneNumberInputFieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>; // Generic to allow reuse in any form
+  control: Control<any>; // replace 'any' with the appropriate form schema type
   name: string;
   label?: string;
-  className?: string;
-  placeholder?: string;
   error?: FieldError | undefined;
+  className?: string;
 }
 
-export const PhoneInputField: React.FC<PhoneInputProps> = ({
+export const PhoneInputField: React.FC<PhoneNumberInputFieldProps> = ({
   control,
   name,
-  className,
   label = 'Phone Number',
-  placeholder = 'Enter your phone number',
+  className,
   error,
 }) => {
   const options = getCountriesOptions();
-  const defaultCountry = 'US';
-  const defaultCountryOption = options.find(
-    (option) => option.value === defaultCountry,
-  );
   const [country, setCountry] = useState<CountryOption>(
-    defaultCountryOption || options[0]!,
+    options.find((option) => option.value === 'US') || options[0]!,
+  );
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
+
+  const placeholder = replaceNumbersWithZeros(
+    getExampleNumber(country.value, examples)?.formatInternational() || '',
   );
 
-  const handleCountryChange = (value: CountryOption) => {
+  const onCountryChange = (value: CountryOption) => {
     setCountry(value);
+    setPhoneNumber(''); // Reset phone number when country changes
   };
 
-  const countryPlaceholder = replaceNumbersWithZeros(
-    getExampleNumber(country.value, examples)!.formatInternational(),
-  );
-
   return (
-    <FormItem className={cn('', className)}>
-      <FormLabel>{label}</FormLabel>
-      <div className='flex gap-2'>
-        <ComboboxCountryInput
-          value={country}
-          onValueChange={handleCountryChange}
-          options={options}
-          placeholder='Find your country...'
-          renderOption={({ option }) =>
-            `${isoToEmoji(option.value)} ${option.label}`
-          }
-          renderValue={(option) => option.label}
-          emptyMessage='No country found.'
-        />
-        <Controller
-          name={name}
-          control={control}
-          render={({ field }) => (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={cn('leading-4', className)}>
+          <FormLabel className='font-medium text-blackcustom-900'>
+            {label}
+          </FormLabel>
+          <div className='flex gap-2'>
+            <ComboboxCountryInput
+              value={country}
+              onValueChange={(value) => {
+                onCountryChange(value);
+              }}
+              options={options}
+              placeholder='Find your country...'
+              renderOption={({ option }) =>
+                `${isoToEmoji(option.value)} ${option.label}`
+              }
+              renderValue={(option) => option.label}
+              emptyMessage='No country found.'
+            />
             <PhoneInput
               international
               withCountryCallingCode
               country={country.value.toUpperCase() as Country}
-              value={field.value}
+              value={phoneNumber}
               inputComponent={Input}
-              placeholder={placeholder || countryPlaceholder}
-              onChange={(value) => field.onChange(value)}
+              placeholder={placeholder}
+              onChange={(value) => {
+                setPhoneNumber(value || '');
+                field.onChange(value); // only update the form with the phone number
+              }}
             />
-          )}
-        />
-      </div>
-      {error && (
-        <FormMessage className='text-red-500'>{error.message}</FormMessage>
+          </div>
+          {error && <FormMessage>{error.message}</FormMessage>}
+        </FormItem>
       )}
-    </FormItem>
+    />
   );
 };

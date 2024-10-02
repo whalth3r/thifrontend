@@ -9,19 +9,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 
+import { TextInputField } from '@/components/common/shadcn_extentions/inputs/TextInput';
+import { EyeIcon } from '@/components/icons/EyeIcon';
+import { EyeLineIcon } from '@/components/icons/EyeLineIcon';
 // import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FacebookI } from '@/components/icons/FacebookI';
 import { GoogleI } from '@/components/icons/GoogleI';
 import { TwitterI } from '@/components/icons/TwitterI';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 
 import {
   loginWithFacebook,
@@ -32,11 +28,23 @@ import { auth } from '@/lib/firebase.config';
 
 const formLoginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6).max(50),
+  password: z
+    .string(
+      //eslint-disable-next-line @typescript-eslint/naming-convention
+      { required_error: 'Password is required' },
+    )
+    .min(8, {
+      message: 'Password must be at least 8 characters long',
+    }),
 });
 type FormLogin = z.infer<typeof formLoginSchema>;
 const formRegisterSchema = z.object({
-  email: z.string().email(),
+  email: z
+    .string({
+      //eslint-disable-next-line @typescript-eslint/naming-convention
+      required_error: 'Email is required',
+    })
+    .email(),
 });
 type FormRegister = z.infer<typeof formRegisterSchema>;
 
@@ -46,6 +54,7 @@ interface AuthFormProps {
 
 export const AuthForm: React.FC<AuthFormProps> = ({ currentForm }) => {
   const router = useRouter();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const loginDefaultValues = {
     email: '',
@@ -132,12 +141,25 @@ export const AuthForm: React.FC<AuthFormProps> = ({ currentForm }) => {
   return (
     <div className='flex flex-col gap-2'>
       <div className='py-2'>
-        <h2 className='text-center text-2xl font-semibold leading-8 tracking-tighter'>
-          Sign in
-        </h2>
-        <p className='text-center text-xs font-normal leading-5'>
-          Great to see you again! Please enter your details to log in.
-        </p>
+        {currentForm === 'login' ? (
+          <>
+            <h2 className='text-center text-2xl font-semibold leading-8 tracking-tighter'>
+              Sign in
+            </h2>
+            <p className='text-center text-sm font-normal leading-5'>
+              Great to see you again! Please enter your details to log in.
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className='text-center text-2xl font-semibold leading-8 tracking-tighter'>
+              Sign up
+            </h2>
+            <p className='text-center text-sm font-normal leading-5'>
+              Enter your email below to create your account
+            </p>
+          </>
+        )}
       </div>
       <Form {...form}>
         <form
@@ -145,34 +167,31 @@ export const AuthForm: React.FC<AuthFormProps> = ({ currentForm }) => {
           className='mx-auto w-full max-w-md space-y-8'
         >
           <div className='flex flex-col gap-4'>
-            <FormField
+            <TextInputField
               control={form.control}
               name='email'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder='email' {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
+              label='Email'
+              placeholder='Enter your email address'
+              error={form.formState.errors.email}
             />
             {currentForm === 'login' && (
-              <FormField
+              <TextInputField
                 control={form.control}
                 name='password'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type='password'
-                        placeholder='password'
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                className='col-span-1 md:col-span-2 lg:col-span-1'
+                label='Confirm Password'
+                placeholder='Enter your password'
+                type={isPasswordVisible ? 'text' : 'password'}
+                suffix={isPasswordVisible ? <EyeLineIcon /> : <EyeIcon />}
+                toggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                //eslint-disable-next-line @typescript-eslint/no-explicit-any
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
+                error={
+                  'password' in form.formState.errors
+                    ? form.formState.errors.password
+                    : undefined
+                }
               />
             )}
             {currentForm === 'login' && (

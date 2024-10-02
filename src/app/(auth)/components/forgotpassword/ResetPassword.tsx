@@ -87,7 +87,7 @@ export const ResetPassword = () => {
       <Form {...multiForm}>
         <form
           onSubmit={multiForm.handleSubmit(onSubmit)}
-          className='w-full max-w-md space-y-8'
+          className='w-full space-y-8'
         >
           <FormField
             name='password'
@@ -145,12 +145,18 @@ export const ResetPassword = () => {
               </FormItem>
             )}
           />
-          <Button disabled={isButtonDisabled} className='w-full' type='submit'>
-            Reset Password
-            {didRequestSent && (
-              <Loader2 className='ml-2 h-4 w-4 animate-spin' />
-            )}
-          </Button>
+          <div className='flex flex-row justify-end'>
+            <Button
+              disabled={isButtonDisabled}
+              className='w-full md:w-fit'
+              type='submit'
+            >
+              Reset Password
+              {didRequestSent && (
+                <Loader2 className='ml-2 h-4 w-4 animate-spin' />
+              )}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

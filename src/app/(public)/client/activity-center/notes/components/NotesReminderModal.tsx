@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { nextApi } from '@/services/api.service';
+import { SingleNote } from '@/types/TActivityCenter';
+import { TZDate } from '@date-fns/tz';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   addMinutes,
@@ -15,6 +18,8 @@ import {
 } from 'date-fns';
 import { BellPlus, CalendarIcon } from 'lucide-react';
 import { z } from 'zod';
+
+import { useNotes } from '@/store/useNotes';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -90,6 +95,8 @@ const getNextHalfHour = (date: Date) => {
 interface NotesReminderModalProps {
   note: string;
   isDisabled: boolean;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
   resetFather: () => void;
 }
 
@@ -97,6 +104,8 @@ export const NotesReminderModal = ({
   note,
   isDisabled,
   resetFather,
+  isOpen,
+  setIsOpen,
 }: NotesReminderModalProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -107,9 +116,9 @@ export const NotesReminderModal = ({
     },
   });
 
-  const [isOpen, setIsOpen] = useState(false);
+  const { activeNote, addNoteToActive } = useNotes();
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { date, time } = values;
     const [hours, minutes] = time.split(':').map(Number);
     const combinedDateTime = setHours(
@@ -117,7 +126,24 @@ export const NotesReminderModal = ({
       hours,
     );
 
-    console.warn({ dateTime: combinedDateTime, note, title: values.title });
+    const createdReminder = {
+      title: values.title,
+      content: note,
+      referenceId: activeNote?.referenceId || '',
+      referenceType: activeNote?.referenceType || '',
+      dueDate: format(
+        new TZDate(combinedDateTime),
+        "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+      ),
+    };
+
+    const { data } = await nextApi.post<SingleNote>({
+      url: '/client/activity-center/reminders',
+      body: createdReminder,
+    });
+
+    addNoteToActive(data);
+
     setIsOpen(false);
     form.reset();
     resetFather();

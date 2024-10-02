@@ -48,7 +48,6 @@ export function ComboboxCountryInput<T extends Option>({
   emptyMessage,
 }: ComboboxCountryInputProps<T>) {
   const [isOpen, setIsOpen] = React.useState(false);
-
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>

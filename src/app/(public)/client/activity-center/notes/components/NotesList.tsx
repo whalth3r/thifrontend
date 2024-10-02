@@ -33,10 +33,9 @@ export const NotesList = () => {
     members: NotesCompanyMember[],
   ): TransformedNotesMember[] => {
     return members.map((member) => ({
-      title: member.companyName,
+      title: member.referenceName,
       description: member.lastNoteContent,
-      lastNoteCreatedDate: member.lastNoteCreatedDate,
-      allNotes: member.allNotes,
+      ...member,
     }));
   };
 

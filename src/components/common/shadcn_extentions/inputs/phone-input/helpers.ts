@@ -28,7 +28,6 @@ export function isoToEmoji(code: string) {
  */
 export function getCountriesOptions() {
   const countries = getCountries();
-
   // Type inference is not working here
   const options = countries
     .map((country) => ({

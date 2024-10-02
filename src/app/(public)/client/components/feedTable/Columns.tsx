@@ -1,17 +1,28 @@
 'use client';
 
-import { ActivityFeed } from '@/types/TActivityFeed';
+import { Item } from '@/types/TActivityFeed';
 import { ColumnDef } from '@tanstack/react-table';
 import { Check, CircleDashed, RefreshCcw, UserPlus, X } from 'lucide-react';
 
-const statusIcons: Record<ActivityFeed['status'], JSX.Element> = {
+const formatDate = (isoDateString: string): string => {
+  const date = new Date(isoDateString);
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }).format(date);
+};
+
+//pendiente de mejora
+const statusIcons: Record<Item['status'], JSX.Element> = {
   approved: <Check className='text-green-500' />,
   renewed: <RefreshCcw className='text-blue-500' />,
   pending: <CircleDashed className='text-yellow-500' />,
   revoked: <X className='text-red-500' />,
-  newCompany: <UserPlus className='text-purple-500' />,
+  new: <UserPlus className='text-purple-500' />,
 };
-export const columns: ColumnDef<ActivityFeed>[] = [
+
+export const columns: ColumnDef<Item>[] = [
   {
     accessorKey: 'activity',
     header: 'Activity',
@@ -24,9 +35,11 @@ export const columns: ColumnDef<ActivityFeed>[] = [
             </a>
             <div>
               <p className='text-xs font-bold lg:text-sm'>
-                {row.original.activity}
+                {row.original.title}
               </p>
-              <p className='text-xs font-thin lg:text-sm'>consultor</p>
+              <p className='text-xs font-thin lg:text-sm'>
+                {row.original.licenseType}
+              </p>
             </div>
           </div>
           <div className='flex w-full justify-between lg:w-6/12'>
@@ -38,11 +51,13 @@ export const columns: ColumnDef<ActivityFeed>[] = [
             </div>
             <div className='flex w-1/3 flex-col items-end lg:w-1/6 lg:items-start'>
               <p className='text-xs font-thin lg:text-sm'>State</p>
-              <p className='text-xs lg:text-sm'>{row.original.state}</p>
+              <p className='text-xs lg:text-sm'>{row.original.companyState}</p>
             </div>
             <div className='flex w-1/3 flex-col items-end lg:w-1/6 lg:items-start'>
               <p className='text-xs font-thin lg:text-sm'>Date</p>
-              <p className='text-xs lg:text-sm'>{row.original.date}</p>
+              <p className='text-xs lg:text-sm'>
+                {formatDate(row.original.createdAt)}
+              </p>
             </div>
           </div>
         </div>

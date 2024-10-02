@@ -53,7 +53,7 @@ export const SelectInputField: React.FC<SelectFieldProps> = ({
               className={cn(
                 'relative flex h-10 w-full cursor-pointer select-none appearance-none items-center rounded-sm border !px-2 py-1.5 text-sm outline-none focus-visible:border focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
                 {
-                  ['border-red-500']: error,
+                  ['']: error,
                 },
               )}
               style={{

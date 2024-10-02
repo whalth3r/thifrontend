@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { nextApi } from '@/services/api.service';
+import { SingleNote } from '@/types/TActivityCenter';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FilePlus2 } from 'lucide-react';
 import { z } from 'zod';
@@ -22,7 +24,9 @@ const formSchema = z.object({
 });
 
 export const NotesDetailCard = () => {
-  const { activeNote } = useNotes();
+  const { activeNote, addNoteToActive } = useNotes();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,8 +34,28 @@ export const NotesDetailCard = () => {
 
   const { reset, watch } = form;
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.warn(data);
+  const onSubmit = async (formData: z.infer<typeof formSchema>) => {
+    if (isOpen) {
+      return;
+    }
+    const createdNote = {
+      note: formData.note,
+      referenceId: activeNote?.referenceId || '',
+      referenceType: activeNote?.referenceType || '',
+    };
+    const { data, status } = await nextApi.post<SingleNote>({
+      url: '/client/activity-center/notes',
+      body: createdNote,
+    });
+
+    if (status !== 200) {
+      // TODO: Manejo de errores
+      console.error('Error');
+      return;
+    }
+
+    addNoteToActive(data);
+
     reset({
       note: '',
     });
@@ -88,6 +112,8 @@ export const NotesDetailCard = () => {
                 note={form.watch('note')}
                 isDisabled={isDisabled}
                 resetFather={resetFather}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
               />
               <Button disabled={isDisabled} type='submit' variant={'outline'}>
                 <FilePlus2 className='my-auto mr-2 h-4 w-4' />

@@ -53,7 +53,6 @@ export const PhoneInputShadcnUiPhoneInput = () => {
     setPhoneNumber(undefined);
     setCountry(value);
   };
-
   const isValidPhoneNumber = matchIsValidPhoneNumber(phoneNumber ?? '');
 
   return (

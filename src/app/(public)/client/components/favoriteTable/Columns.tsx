@@ -3,19 +3,13 @@
 // Agregar esto al inicio del archivo
 import { useState } from 'react';
 
+import { FavoriteInterface } from '@/types/TFavorite';
 import { ColumnDef } from '@tanstack/react-table';
 import { CircleMinus, Eye } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-export type Favorite = {
-  id: number;
-  title: string;
-  details: [] | null;
-  removeFromFavorites: boolean;
-};
-
-export const Columns: ColumnDef<Favorite>[] = [
+export const Columns: ColumnDef<FavoriteInterface>[] = [
   {
     accessorKey: 'title',
     enableGlobalFilter: true,

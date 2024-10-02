@@ -40,15 +40,14 @@ export const ReminderDetailCard = () => {
   }
 
   const {
-    title,
-    state,
-    date,
-    createdAt,
-    dueAt,
-    description,
-    companyName,
-    email,
-    phoneNumber,
+    titleReminder,
+    reminderStatus,
+    referenceEmail,
+    referencePhoneNumber,
+    referenceName,
+    createdDate,
+    dueDate,
+    content,
     comment,
   } = activeReminder;
   return (
@@ -56,31 +55,34 @@ export const ReminderDetailCard = () => {
       <CardACRoot className='gap-0'>
         <div className='flex justify-between'>
           <div className='flex flex-col gap-1'>
-            <p className='text-left text-base font-semibold'>{title}</p>
-            <StateParser state={state} />
+            <p className='text-left text-base font-semibold'>{titleReminder}</p>
+            <StateParser state={reminderStatus} />
           </div>
           <p className='text-right text-xs font-normal text-muted-foreground'>
-            {format(date, 'MM/dd/yyyy, HH:mm aaaa')}
+            {format(createdDate, 'MM/dd/yyyy, HH:mm aaaa')}
           </p>
         </div>
         <div className='grid w-full grid-cols-2 gap-4 text-left'>
           <LabelContent
             label='Created'
-            content={format(createdAt, 'eeee, dd LLL yyyy')}
+            content={format(createdDate, 'eeee, dd LLL yyyy')}
           />
-          <LabelContent label='Due date' content={formatDateRelative(dueAt)} />
-          <p className='col-span-full text-muted-foreground'>{description}</p>
-          <LabelContent label='Company name:' content={companyName} />
+          <LabelContent
+            label='Due date'
+            content={formatDateRelative(dueDate)}
+          />
+          <p className='col-span-full text-muted-foreground'>{content}</p>
+          <LabelContent label='Company name:' content={referenceName} />
           <LabelContent
             label='Email Address:'
             className='break-all'
-            content={email}
+            content={referenceEmail}
           />
           <LabelContent
             label='Phone number:'
-            content={formatPhoneNumber(phoneNumber)}
+            content={formatPhoneNumber(referencePhoneNumber)}
           />
-          {state !== 'Completed' && <MarkCompletedDialog />}
+          {reminderStatus !== 'Completed' && <MarkCompletedDialog />}
         </div>
       </CardACRoot>
       {comment && (

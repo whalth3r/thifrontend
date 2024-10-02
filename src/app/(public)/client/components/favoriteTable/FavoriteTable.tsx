@@ -1,72 +1,13 @@
-import { Columns, Favorite } from './Columns';
+import { FavoriteInterface } from '@/types/TFavorite';
+
+import { favorites } from '@/lib/mocks/favorite';
+
+import { Columns } from './Columns';
 import { DataTable } from './DataTable';
 
-async function getData(): Promise<Favorite[]> {
+async function getData(): Promise<FavoriteInterface[]> {
   // Fetch data from your API here.
-  return [
-    {
-      id: 1,
-      title: 'HighCompany',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 2,
-      title: 'HighBussines',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 3,
-      title: 'HighElement',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 4,
-      title: 'HighLocal',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 5,
-      title: 'HighCorp',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 6,
-      title: 'HighEnterprise',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 7,
-      title: 'HighEnterprise',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 8,
-      title: 'HighEnterprise',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 9,
-      title: 'HighEnterprise',
-      details: null,
-      removeFromFavorites: false,
-    },
-    {
-      id: 10,
-      title: 'HighEnterprise',
-      details: null,
-      removeFromFavorites: false,
-    },
-
-    // ...
-  ];
+  return favorites;
 }
 
 export default async function FavoriteTable() {

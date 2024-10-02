@@ -1,5 +1,5 @@
 import { NotesCompanyMember } from '@/types/TActivityCenter';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -28,7 +28,7 @@ export const NotesTimeline = ({ activeNote }: NotesTimelineProps) => {
                 <div className='size-1 rounded-full bg-primary'></div>
               </TimelineIcon>
               <TimelineTitle className='text-xs font-normal text-muted-foreground'>
-                {format(note.createdDate, 'HH:mmaa - MMMM dd, yyyy')}
+                {format(parseISO(note.createdDate), 'HH:mmaa - MMMM dd, yyyy')}
               </TimelineTitle>
             </TimelineHeader>
             <TimelineContent className='pb-0'>

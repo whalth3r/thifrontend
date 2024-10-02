@@ -46,7 +46,6 @@ export const CheckboxGroupField: React.FC<CheckboxGroupFieldProps> = ({
 
   // Initialize field.value as an empty array if it is undefined for multiple selection
   const fieldValue = hasMultiple ? field.value || [] : field.value || null;
-
   return (
     <FormItem className={cn('', className)}>
       <div className='mb-4'>

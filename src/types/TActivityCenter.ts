@@ -6,34 +6,41 @@ export interface Notification {
 }
 
 export interface Reminders {
-  title: string;
-  description: string;
-  state: 'Upcoming' | 'Overdue' | 'Completed';
-  date: string;
-  createdAt: string;
-  dueAt: string;
-  companyName: string;
-  email: string;
-  phoneNumber: string;
+  reminderId: number;
+  titleReminder: string;
+  content: string;
+  reminderStatus: 'Upcoming' | 'Overdue' | 'Completed';
+  createdDate: string;
+  dueDate: string;
+  referenceName: string;
+  referenceEmail: string;
+  referencePhoneNumber: string;
   comment: string | null;
 }
 
+export interface TransformedReminders
+  extends Omit<Reminders, 'titleReminder' | 'content'> {
+  title: string;
+  description: string;
+}
+
 export interface NotesCompanyMember {
-  companyName: string;
+  referenceId: number;
+  referenceType: string;
+  referenceName: string;
   lastNoteContent: string;
   lastNoteCreatedDate: string;
   allNotes: SingleNote[];
 }
 
-interface SingleNote {
+export interface SingleNote {
   noteId: number;
   content: string;
   createdDate: string;
 }
 
-export interface TransformedNotesMember {
+export interface TransformedNotesMember
+  extends Omit<NotesCompanyMember, 'referenceName' | 'lastNoteContent'> {
   title: string;
   description: string;
-  lastNoteCreatedDate: string;
-  allNotes: SingleNote[];
 }

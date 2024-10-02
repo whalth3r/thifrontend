@@ -13,13 +13,19 @@ export const getFilteredRemindersAction = async (
 
   switch (filter) {
     case 'completed':
-      filteredReminders = reminders.filter((n) => n.state === 'Completed');
+      filteredReminders = reminders.filter(
+        (n) => n.reminderStatus === 'Completed',
+      );
       break;
     case 'overdue':
-      filteredReminders = reminders.filter((n) => n.state === 'Overdue');
+      filteredReminders = reminders.filter(
+        (n) => n.reminderStatus === 'Overdue',
+      );
       break;
     case 'upcoming':
-      filteredReminders = reminders.filter((n) => n.state === 'Upcoming');
+      filteredReminders = reminders.filter(
+        (n) => n.reminderStatus === 'Upcoming',
+      );
       break;
     case 'all':
     default:
@@ -29,7 +35,7 @@ export const getFilteredRemindersAction = async (
   // Filtrar por búsqueda en el título
   if (search) {
     filteredReminders = filteredReminders.filter((n) =>
-      n.title.toLowerCase().includes(search.toLowerCase()),
+      n.titleReminder.toLowerCase().includes(search.toLowerCase()),
     );
   }
 

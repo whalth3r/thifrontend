@@ -1,4 +1,4 @@
-import { Reminders } from '@/types/TActivityCenter';
+import { Reminders, TransformedReminders } from '@/types/TActivityCenter';
 import { create } from 'zustand';
 
 export type ReminderTabsState = 'all' | 'upcoming' | 'overdue' | 'completed';
@@ -17,7 +17,7 @@ type RemindersState = {
 type RemindersActions = {
   setIsLoading: (loading: boolean) => void;
   setReminders: (reminders: Reminders[]) => void;
-  setActiveReminder: (reminder: Reminders) => void;
+  setActiveReminder: (reminder: TransformedReminders) => void;
   setTabsFilter: (tabFilter: ReminderTabsState) => void;
   setSearchFilter: (searchFilter: string) => void;
   setFilteredReminders: (reminders: Reminders[]) => void;
@@ -46,7 +46,11 @@ export const useReminders = create<RemindersState & RemindersActions>()(
     },
     setActiveReminder: (reminder) => {
       set({
-        activeReminder: reminder,
+        activeReminder: {
+          titleReminder: reminder.title,
+          content: reminder.description,
+          ...reminder,
+        },
       });
     },
     setTabsFilter: (filterTab) => {

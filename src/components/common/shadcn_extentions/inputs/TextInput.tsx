@@ -51,9 +51,9 @@ export const TextInputField: React.FC<TextInputFieldProps> = ({
             type={type}
             placeholder={placeholder}
             {...control.register(name)} // Register the input field with react-hook-form
-            className={cn({
-              ['border-red-500']: error,
-            })}
+            // className={cn({
+            //   ['border-red-500']: error,
+            // })}
           />
           {suffix && (
             <span

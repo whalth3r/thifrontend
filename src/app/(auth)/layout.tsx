@@ -40,7 +40,7 @@ export default function AuthLayout({
       </section>
       <section className='relative flex w-full flex-col items-center justify-center px-2 py-16 min-[1157px]:w-2/4'>
         <RedirectButton />
-        <div className='custom-scrollbar w-full max-w-lg overflow-y-auto overflow-x-hidden px-4 md:px-8 lg:max-w-[34rem]'>
+        <div className='custom-scrollbar w-full overflow-y-auto overflow-x-hidden p-4 md:p-8 lg:max-w-none lg:p-[4.5rem]'>
           {children}
         </div>
       </section>

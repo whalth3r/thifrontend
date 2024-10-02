@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Control } from 'react-hook-form';
 
 import { Upload } from 'lucide-react';
@@ -48,8 +49,14 @@ export const FileUploaderField: React.FC<FileUploaderFieldProps> = ({
   error,
   isOptional = false,
 }) => {
+  const [isFileSizeExceeded, setIsFileSizeExceeded] = useState(false);
   const handleUpload = (files: File[] | null) => {
-    if (files) onValueChange(files);
+    if (files) {
+      const isExceeded =
+        files.length < 1 || files.some((file) => file.size < 1);
+      setIsFileSizeExceeded(isExceeded);
+      onValueChange(files);
+    }
   };
 
   return (
@@ -101,7 +108,12 @@ export const FileUploaderField: React.FC<FileUploaderFieldProps> = ({
               )}
             </FormLabel>
             {description && (
-              <FormDescription className='text-start text-xs font-medium leading-5 text-inputs-100'>
+              <FormDescription
+                className={cn('text-start text-xs font-medium leading-5', {
+                  ['text-inputs-100']: !isFileSizeExceeded,
+                  ['text-red-500']: isFileSizeExceeded,
+                })}
+              >
                 {description}
               </FormDescription>
             )}

@@ -1,5 +1,6 @@
 import {
   NotesCompanyMember,
+  SingleNote,
   TransformedNotesMember,
 } from '@/types/TActivityCenter';
 import { create } from 'zustand';
@@ -21,6 +22,7 @@ type NotesActions = {
   setSearchFilter: (searchFilter: string) => void;
   setFilteredNotes: (notes: NotesCompanyMember[]) => void;
   setResetState: () => void;
+  addNoteToActive: (newNote: SingleNote) => void;
 };
 
 const InitialState: NotesState = {
@@ -45,7 +47,7 @@ export const useNotes = create<NotesState & NotesActions>()((set) => ({
     set({
       activeNote: {
         lastNoteContent: activeNote.description,
-        companyName: activeNote.title,
+        referenceName: activeNote.title,
         ...activeNote,
       },
     });
@@ -70,5 +72,52 @@ export const useNotes = create<NotesState & NotesActions>()((set) => ({
     set(() => ({
       ...InitialState,
     }));
+  },
+  addNoteToActive: (newNote) => {
+    set((state) => {
+      const { activeNote } = state;
+
+      if (!activeNote) return state; // Si no hay activeNote, no hacer nada
+
+      // 1. Actualizar activeNote
+      const updatedActiveNote = {
+        ...activeNote,
+        allNotes: [...activeNote.allNotes, newNote],
+        lastNoteContent: newNote.content,
+        lastNoteCreatedDate: newNote.createdDate,
+      };
+
+      // // 2. Actualizar notes (modificar solo la nota correspondiente)
+      // const updatedNotes = notes.map((note) =>
+      //   note.referenceId === activeNote.referenceId ? updatedActiveNote : note,
+      // );
+
+      // // 3. Actualizar filters.notes si contiene activeNote
+      // const updatedFilteredNotes = filters.notes.some(
+      //   (note) => note.referenceId === activeNote.referenceId,
+      // )
+      //   ? filters.notes.map((note) =>
+      //       note.referenceId === activeNote.referenceId
+      //         ? updatedActiveNote
+      //         : note,
+      //     )
+      //   : filters.notes;
+
+      // console.log({
+      //   updatedActiveNote,
+      //   updatedNotes,
+      //   updatedFilteredNotes,
+      // });
+
+      return {
+        ...state,
+        activeNote: updatedActiveNote,
+        // notes: updatedNotes,
+        // filters: {
+        //   ...filters,
+        //   notes: updatedFilteredNotes,
+        // },
+      };
+    });
   },
 }));
